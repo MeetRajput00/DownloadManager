@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="DownloadManager.View.Download"
+    xmlns:models="clr-namespace:DownloadManager.Models.Models;assembly=DownloadManager.Models"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    Title="Download Manager"
+    xmlns:lists="clr-namespace:DownloadManager.Services;assembly=DownloadManager.Services">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="35" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <material:TextField
+                Margin="6"
+                Title="Download Link"
+                HorizontalOptions="FillAndExpand"
+                Text="{Binding DownloadUrl, Mode=TwoWay}"
+                AllowClear="True"
+                TextChanged="Download_url_text_changed"
+                AccentColor="{StaticResource Key=PrimaryDark}">
+                <material:TextField.Attachments>
+                    <Button
+                        Margin="0,5,5,5"
+                        Command="{Binding DownloadCommand,Mode=OneWay}"
+                        Background="{StaticResource Key=PrimaryDark}"
+                        StyleClass="ElevatedButton"
+                        Text="Download"
+                        VerticalOptions="End"
+                        HorizontalOptions="End" />
+                </material:TextField.Attachments>
+            </material:TextField>
+        </Grid>
+        <Grid
+            BackgroundColor="GhostWhite"
+            Grid.Row="1"
+            Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label
+                FontSize="Medium"
+                FontAttributes="Bold"
+                Margin="10,0,0,0"
+                Text="{Binding ListViewHeader,Mode=OneWay}" />
+            <!--<Grid
+                Grid.Column="1"
+                HorizontalOptions="End">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Background="{StaticResource Key=PrimaryDark}"
+                    ToolTipProperties.Text="Filter records as per criteria">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialDesignIcons"
+                            Glyph="\uea5b"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Background="{StaticResource Key=PrimaryDark}"
+                    Grid.Column="1"
+                    ToolTipProperties.Text="Delete selected item">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialDesignIcons"
+                            Glyph="\uea5b"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+            </Grid>-->
+        </Grid>
+        <ListView
+            Grid.Row="2"
+            Background="GhostWhite"
+            ItemsSource="{Binding DownloadedItems, Mode=OneWay}"
+            ItemSelected="ListView_ItemSelected"
+            VerticalScrollBarVisibility="Always"
+            RowHeight="60">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="2*" />
+                                <RowDefinition
+                                    Height="2*" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Image
+                                Margin="10,0,0,0"
+                                Source="downloadicon.svg"
+                                Grid.RowSpan="3" />
+                            <Label
+                                Grid.Column="1"
+                                Margin="10,0,0,0"
+                                Text="{Binding Title,Mode=OneWay}" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="10,0,0,0"
+                                Text="{Binding ProgressText,Mode=OneWay}" />
+                            <ProgressBar
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="10,0,0,0"
+                                ProgressColor="{StaticResource Key=PrimaryDark}"
+                                Progress="{Binding Progress,Mode=OneWay}" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentPage>

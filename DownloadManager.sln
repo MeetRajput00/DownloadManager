@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager", "MauiApp1Test\DownloadManager.csproj", "{B086FC49-1E89-406D-B123-49C56AB1A232}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager.Models", "DownloadManager.Models\DownloadManager.Models.csproj", "{D3D931EC-59A0-4D6F-B3CB-14E68C3EBFBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager.ViewModels", "DownloadManager.ViewModels\DownloadManager.ViewModels.csproj", "{6D73A320-CEE6-4504-8791-DB8224B5F1B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager.Services", "DownloadManager.Services\DownloadManager.Services.csproj", "{BE70B9E9-17D7-4107-B316-86CAA3C1A1C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager.View", "DownloadManager.View\DownloadManager.View.csproj", "{BACECFD4-8BE7-4053-BD00-EFF740000023}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B086FC49-1E89-406D-B123-49C56AB1A232}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B086FC49-1E89-406D-B123-49C56AB1A232}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B086FC49-1E89-406D-B123-49C56AB1A232}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B086FC49-1E89-406D-B123-49C56AB1A232}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B086FC49-1E89-406D-B123-49C56AB1A232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B086FC49-1E89-406D-B123-49C56AB1A232}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D3D931EC-59A0-4D6F-B3CB-14E68C3EBFBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3D931EC-59A0-4D6F-B3CB-14E68C3EBFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3D931EC-59A0-4D6F-B3CB-14E68C3EBFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3D931EC-59A0-4D6F-B3CB-14E68C3EBFBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D73A320-CEE6-4504-8791-DB8224B5F1B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D73A320-CEE6-4504-8791-DB8224B5F1B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D73A320-CEE6-4504-8791-DB8224B5F1B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D73A320-CEE6-4504-8791-DB8224B5F1B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE70B9E9-17D7-4107-B316-86CAA3C1A1C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE70B9E9-17D7-4107-B316-86CAA3C1A1C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE70B9E9-17D7-4107-B316-86CAA3C1A1C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE70B9E9-17D7-4107-B316-86CAA3C1A1C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BACECFD4-8BE7-4053-BD00-EFF740000023}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BACECFD4-8BE7-4053-BD00-EFF740000023}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BACECFD4-8BE7-4053-BD00-EFF740000023}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BACECFD4-8BE7-4053-BD00-EFF740000023}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8FA4100E-881B-46FE-8B9F-5DAA41C316A7}
+	EndGlobalSection
+EndGlobal
