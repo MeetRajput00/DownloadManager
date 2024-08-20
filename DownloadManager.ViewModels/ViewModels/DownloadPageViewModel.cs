@@ -85,7 +85,7 @@ namespace DownloadManager.ViewModels
                     Title = filename,
                     Status = Models.Enums.DownloadStatus.Downloading
                 };
-                DownloadedItems.Add(CurrentDownloadItem);
+                DownloadedItems.Insert(0, CurrentDownloadItem);
                 _downloadService.SetCurrentItem(CurrentDownloadItem);
                 await Task.Run(async () =>
                 {
@@ -97,6 +97,7 @@ namespace DownloadManager.ViewModels
             }
             catch (Exception ex)
             {
+                MainThread.BeginInvokeOnMainThread(NotificationService.ShowInvalidUrlPopUp);
                 CurrentDownloadItem.Status = Models.Enums.DownloadStatus.Error;
             }
         }
