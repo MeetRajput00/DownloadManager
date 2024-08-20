@@ -14,9 +14,31 @@ namespace DownloadManager.Models.Models
             set { _bytesDownloaded = value; RaisePropertyChanged(); RaisePropertyChanged(nameof(Progress)); RaisePropertyChanged(nameof(ProgressText)); }
         }
 
+        public string FlagStatus
+        {
+            get
+            {
+                if (Status == Enums.DownloadStatus.Downloading)
+                {
+                    return "Yellow";
+                }
+                if (Status == Enums.DownloadStatus.Finished)
+                {
+                    return "Green";
+                }
+                if (Status == Enums.DownloadStatus.Error)
+                {
+                    return "Red";
+                }
+                return "Yellow";
+            }
+        }
+
         public double Progress => TotalBytes == 0 ? 0 : (double)BytesDownloaded / (double)TotalBytes;
 
         public string ProgressText => $"{BytesToMB(BytesDownloaded).ToString("0.00")} MB/{BytesToMB(TotalBytes).ToString("0.00")} MB {double.Round(Progress * 100, 2, MidpointRounding.AwayFromZero).ToString("0.00")}%";
+
+        public string ToolTip => Status.ToString();
 
         public long TotalBytes
         {
