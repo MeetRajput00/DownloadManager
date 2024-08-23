@@ -8,11 +8,17 @@ namespace DownloadManager.Services.Services
     {
         private readonly HttpClient _httpClient;
 
+        private readonly ILogger _logger;
+
         private DownloadItem _currentlyDownloadingItem { get; set; }
 
-        public DownloadService() => _httpClient = new HttpClient();
+        public DownloadService(ILogger logger)
+        {
+            _httpClient = new HttpClient();
+            _logger = logger;
+        }
 
-        public async Task<MemoryStream> Download(string url)
+        public async Task<MemoryStream> Download(string url, DownloadConfiguration downloadConfiguration)
         {
             if (!await IsSegmentedDownloadSupported(url))
             {
@@ -22,7 +28,7 @@ namespace DownloadManager.Services.Services
             long fileSize = await GetFileSize(url);
             _currentlyDownloadingItem.TotalBytes = fileSize;
 
-            int maxDegreeOfParallelism = 6;
+            int maxDegreeOfParallelism = downloadConfiguration.MaxDegreeOfParallelism;
             long segmentSize = fileSize / maxDegreeOfParallelism;
             var tasks = new List<Task<MemoryStream>>();
             var semaphore = new SemaphoreSlim(maxDegreeOfParallelism);

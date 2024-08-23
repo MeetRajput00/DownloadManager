@@ -8,10 +8,10 @@ public partial class Download : ContentPage
 {
     public DownloadPageViewModel ViewModel { get; set; }
 
-    public Download()
+    public Download(DownloadPageViewModel viewModel)
     {
         InitializeComponent();
-        ViewModel = new DownloadPageViewModel();
+        ViewModel = viewModel;
         BindingContext = ViewModel;
     }
 

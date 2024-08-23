@@ -41,6 +41,13 @@ namespace DownloadManager
                     }));
 #endif
             });
+            builder.Services.AddSingleton<Services.IServices.ILogger, Services.Services.Logger>();
+            builder.Services.AddSingleton<Services.IServices.IStorageService, Services.Services.StorageService>();
+            builder.Services.AddSingleton<Services.IServices.IFileService, Services.Services.StorageService>();
+            builder.Services.AddSingleton<Services.IServices.IDownloadService, Services.Services.DownloadService>();
+            builder.Services.AddSingleton<ViewModels.DownloadPageViewModel>();
+            builder.Services.AddSingleton<View.Download>();
+
             return builder.Build();
         }
     }
