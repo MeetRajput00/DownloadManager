@@ -9,13 +9,12 @@ namespace DownloadManager.Services
     {
         private const string systemDataFileName = "systemData.json";
 
-        private static IStorageService _storageService;
+        private static readonly IStorageService _storageService = new StorageService();
 
         public static List<DownloadItem> _downloadedItems { get; set; }
 
         public static async Task InitializeAsync()
         {
-            _storageService = new StorageService();
             try
             {
                 var systemData = JsonConvert.DeserializeObject<SystemData>(await _storageService.GetValueAsync(systemDataFileName));
@@ -29,7 +28,6 @@ namespace DownloadManager.Services
 
         public static async Task UpdateAsync()
         {
-            _storageService = new StorageService();
             var systemData = new SystemData
             {
                 DownloadItems = _downloadedItems

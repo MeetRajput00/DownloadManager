@@ -2,9 +2,14 @@
 
 namespace DownloadManager.Services.Services
 {
-    public class StorageService : IStorageService, IFileService
+    public class StorageService : IStorageService, IFileService, IDisposable
     {
-        private SemaphoreSlim _semaphore => new SemaphoreSlim(1);
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
+
+        public void Dispose()
+        {
+            _semaphore?.Dispose();
+        }
 
         public async Task<string> GetValueAsync(string path)
         {
@@ -24,7 +29,7 @@ namespace DownloadManager.Services.Services
         {
             try
             {
-                await _semaphore.WaitAsync();
+                await _semaphore.WaitAsync(cancellationToken);
                 var fileName = System.IO.Path.Combine(FileSystem.CacheDirectory, path);
                 using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
@@ -35,6 +40,7 @@ namespace DownloadManager.Services.Services
             }
             finally
             {
+                stream?.Dispose();
                 _semaphore.Release();
             }
         }
