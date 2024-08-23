@@ -8,27 +8,34 @@ namespace DownloadManager.Services.Services
     {
         private readonly HttpClient _httpClient;
 
+        private readonly ILogger _logger;
+
         private DownloadItem _currentlyDownloadingItem { get; set; }
 
-        public DownloadService() => _httpClient = new HttpClient();
+        public DownloadService(ILogger logger)
+        {
+            _httpClient = new HttpClient();
+            _logger = logger;
+        }
 
-        public async Task<MemoryStream> Download(string url)
+        public async Task<MemoryStream> Download(string url, DownloadConfiguration downloadConfiguration)
         {
             if (!await IsSegmentedDownloadSupported(url))
             {
                 throw new NotSupportedException();
             }
+
             long fileSize = await GetFileSize(url);
             _currentlyDownloadingItem.TotalBytes = fileSize;
-            int maxDegreeOfParallelism = 6;
+
+            int maxDegreeOfParallelism = downloadConfiguration.MaxDegreeOfParallelism;
             long segmentSize = fileSize / maxDegreeOfParallelism;
-            var tasks = new List<Task>();
-            var memoryStream = new MemoryStream();
+            var tasks = new List<Task<MemoryStream>>();
             var semaphore = new SemaphoreSlim(maxDegreeOfParallelism);
             var progressLock = new object();
+
             for (int i = 0; i < maxDegreeOfParallelism; i++)
             {
-                await semaphore.WaitAsync();
                 long start = i * segmentSize;
                 long end = (i == maxDegreeOfParallelism - 1) ? fileSize - 1 : (start + segmentSize - 1);
                 var progress = new Progress<long>(bytes =>
@@ -41,10 +48,12 @@ namespace DownloadManager.Services.Services
 
                 tasks.Add(Task.Run(async () =>
                 {
+                    await semaphore.WaitAsync();
                     try
                     {
-                        memoryStream.Position = start;
-                        await DownloadSegment(url, start, end, memoryStream, progress, CancellationToken.None);
+                        var segmentStream = new MemoryStream((int)(end - start + 1));
+                        await DownloadSegment(url, start, end, segmentStream, progress, CancellationToken.None);
+                        return segmentStream;
                     }
                     finally
                     {
@@ -52,7 +61,17 @@ namespace DownloadManager.Services.Services
                     }
                 }));
             }
-            await Task.WhenAll(tasks);
+
+            var memoryStream = new MemoryStream();
+            var segmentStreams = await Task.WhenAll(tasks);
+
+            foreach (var segmentStream in segmentStreams)
+            {
+                segmentStream.Position = 0;
+                await segmentStream.CopyToAsync(memoryStream);
+                segmentStream.Dispose();
+            }
+
             memoryStream.Position = 0;
             return memoryStream;
         }
@@ -109,16 +128,6 @@ namespace DownloadManager.Services.Services
         public void SetCurrentItem(DownloadItem currentlyDownloadingItem)
         {
             _currentlyDownloadingItem = currentlyDownloadingItem;
-        }
-
-        private async Task<byte[]> DownloadFileAsync(string url)
-        {
-            using var request = new HttpRequestMessage(HttpMethod.Get, url);
-
-            using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadAsByteArrayAsync();
         }
 
         private async Task<long> GetFileSize(string url)

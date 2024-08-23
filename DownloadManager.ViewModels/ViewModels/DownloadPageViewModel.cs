@@ -4,6 +4,7 @@ using DownloadManager.Services;
 using DownloadManager.Services.IServices;
 using DownloadManager.Services.Services;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 
@@ -14,6 +15,8 @@ namespace DownloadManager.ViewModels
         private readonly IDownloadService _downloadService;
 
         private readonly IFileService _fileService;
+
+        private readonly ILogger _logger;
 
         private DownloadItem _currentDownloadItem = new DownloadItem();
 
@@ -31,11 +34,9 @@ namespace DownloadManager.ViewModels
 
         public ICommand DownloadCommand => new AsyncRelayCommand(async () =>
         {
-            await DownloadCommandExecute().ContinueWith(async x =>
-            {
-                RaisePropertyChanged(nameof(ListViewHeader));
-                await UpdateCache();
-            });
+            await DownloadCommandExecute();
+            RaisePropertyChanged(nameof(ListViewHeader));
+            await UpdateCache();
         });
 
         public ObservableCollection<DownloadItem> DownloadedItems
@@ -61,10 +62,11 @@ namespace DownloadManager.ViewModels
 
         public string ListViewHeader => $"Downloaded Items ({DownloadedItems.Count})";
 
-        public DownloadPageViewModel()
+        public DownloadPageViewModel(IFileService fileService, IDownloadService downloadService, ILogger logger)
         {
-            _fileService = new StorageService();
-            _downloadService = new DownloadService();
+            _fileService = fileService;
+            _downloadService = downloadService;
+            _logger = logger;
         }
 
         private async Task DownloadCommandExecute()
@@ -87,16 +89,18 @@ namespace DownloadManager.ViewModels
                 };
                 DownloadedItems.Insert(0, CurrentDownloadItem);
                 _downloadService.SetCurrentItem(CurrentDownloadItem);
-                await Task.Run(async () =>
-                {
-                    var memoryStream = await _downloadService.Download(DownloadUrl);
-                    CurrentDownloadItem.FilePath = await _fileService.SaveFile(memoryStream, filename, new CancellationToken());
-                }
-                );
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
+                _logger.LogInfo($"Download started for {filename}.");
+                var memoryStream = await _downloadService.Download(DownloadUrl, new DownloadConfiguration());
+                CurrentDownloadItem.FilePath = await _fileService.SaveFile(memoryStream, filename, new CancellationToken());
+                stopWatch.Stop();
+                _logger.LogInfo($"Download finished for {filename}. Total time taken: {new TimeSpan(stopWatch.ElapsedTicks)}");
                 CurrentDownloadItem.Status = Models.Enums.DownloadStatus.Finished;
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Download filed for {filename}. Exception:-{ex.Message}");
                 MainThread.BeginInvokeOnMainThread(NotificationService.ShowInvalidUrlPopUp);
                 CurrentDownloadItem.Status = Models.Enums.DownloadStatus.Error;
             }

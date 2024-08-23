@@ -4,7 +4,7 @@ namespace DownloadManager.Services.IServices
 {
     public interface IDownloadService
     {
-        Task<MemoryStream> Download(string url);
+        Task<MemoryStream> Download(string url, DownloadConfiguration downloadConfiguration);
 
         void SetCurrentItem(DownloadItem currentlyDownloadingItem);
     }

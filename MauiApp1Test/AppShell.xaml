@@ -7,18 +7,11 @@
     Shell.FlyoutBehavior="Flyout"
     Shell.TabBarIsVisible="False"
     Title="MauiApp1Test">
-    <Shell.FlyoutWidth>170</Shell.FlyoutWidth>
+    <Shell.FlyoutWidth>200</Shell.FlyoutWidth>
     <Shell.FlyoutHeader>
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="0.25*" />
-                <ColumnDefinition
-                    Width="*" />
-            </Grid.ColumnDefinitions>
             <Label
                 MinimumHeightRequest="80"
-                Grid.Column="1"
                 Text="Settings"
                 FontAttributes="Bold"
                 HorizontalTextAlignment="Center"
@@ -28,43 +21,18 @@
     <FlyoutItem
         FlyoutDisplayOptions="AsMultipleItems">
         <Tab
-            Title="Specification">
+            Title="Configuration">
             <ShellContent
-                Title="Home"
+                Title="Configuration"
                 ContentTemplate="{DataTemplate views:Download}"
                 Route="MainPage" />
         </Tab>
         <Tab
-            Title="Contact">
+            Title="Logs.txt">
             <ShellContent
-                Title="Home"
-                ContentTemplate="{DataTemplate views:Download}"
-                Route="MainPage" />
-        </Tab>
-        <Tab
-            Title="Terms">
-            <ShellContent
-                Title="Home"
-                ContentTemplate="{DataTemplate views:Download}"
-                Route="MainPage" />
-        </Tab>
-        <Tab
-            Title="About">
-            <ShellContent
-                Title="Home"
-                ContentTemplate="{DataTemplate views:Download}"
-                Route="MainPage" />
-        </Tab>
-        <Tab
-            Title="Feedback">
-            <ShellContent
-                Title="Home"
+                Title="Logs"
                 ContentTemplate="{DataTemplate views:Download}"
                 Route="MainPage" />
         </Tab>
     </FlyoutItem>
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:Download}"
-        Route="MainPage" />
 </Shell>
