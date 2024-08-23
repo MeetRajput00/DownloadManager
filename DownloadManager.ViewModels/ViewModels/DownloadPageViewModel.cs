@@ -31,11 +31,9 @@ namespace DownloadManager.ViewModels
 
         public ICommand DownloadCommand => new AsyncRelayCommand(async () =>
         {
-            await DownloadCommandExecute().ContinueWith(async x =>
-            {
-                RaisePropertyChanged(nameof(ListViewHeader));
-                await UpdateCache();
-            });
+            await DownloadCommandExecute();
+            RaisePropertyChanged(nameof(ListViewHeader));
+            await UpdateCache();
         });
 
         public ObservableCollection<DownloadItem> DownloadedItems
@@ -87,12 +85,8 @@ namespace DownloadManager.ViewModels
                 };
                 DownloadedItems.Insert(0, CurrentDownloadItem);
                 _downloadService.SetCurrentItem(CurrentDownloadItem);
-                await Task.Run(async () =>
-                {
-                    var memoryStream = await _downloadService.Download(DownloadUrl);
-                    CurrentDownloadItem.FilePath = await _fileService.SaveFile(memoryStream, filename, new CancellationToken());
-                }
-                );
+                var memoryStream = await _downloadService.Download(DownloadUrl);
+                CurrentDownloadItem.FilePath = await _fileService.SaveFile(memoryStream, filename, new CancellationToken());
                 CurrentDownloadItem.Status = Models.Enums.DownloadStatus.Finished;
             }
             catch (Exception ex)
