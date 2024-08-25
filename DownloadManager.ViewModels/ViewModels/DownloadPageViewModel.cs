@@ -34,6 +34,11 @@ namespace DownloadManager.ViewModels
 
         public ICommand DownloadCommand => new AsyncRelayCommand(async () =>
         {
+            if (!IsValidUrl)
+            {
+                MainThread.BeginInvokeOnMainThread(NotificationService.ShowInvalidUrlPopUp);
+                return;
+            }
             await DownloadCommandExecute();
             RaisePropertyChanged(nameof(ListViewHeader));
             await UpdateCache();
@@ -56,7 +61,7 @@ namespace DownloadManager.ViewModels
             get
             {
                 string urlPattern = @"^(http|https)://[^\s/$.?#].[^\s]*$";
-                return Regex.IsMatch(DownloadUrl, urlPattern, RegexOptions.IgnoreCase);
+                return string.IsNullOrEmpty(DownloadUrl) ? false : Regex.IsMatch(DownloadUrl, urlPattern, RegexOptions.IgnoreCase);
             }
         }
 
@@ -71,11 +76,6 @@ namespace DownloadManager.ViewModels
 
         private async Task DownloadCommandExecute()
         {
-            if (!IsValidUrl)
-            {
-                MainThread.BeginInvokeOnMainThread(NotificationService.ShowInvalidUrlPopUp);
-                return;
-            }
             var uri = new Uri(DownloadUrl);
             var filename = System.IO.Path.GetFileName(uri.LocalPath);
             try
