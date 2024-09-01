@@ -20,19 +20,37 @@ namespace DownloadManager.Services.Services
 
         public async Task<MemoryStream> Download(string url, DownloadConfiguration downloadConfiguration)
         {
-            if (!await IsSegmentedDownloadSupported(url))
-            {
-                throw new NotSupportedException();
-            }
-
             long fileSize = await GetFileSize(url);
             _currentlyDownloadingItem.TotalBytes = fileSize;
+            var progressLock = new object();
+            if (!await IsSegmentedDownloadSupported(url))
+            {
+                var singleSemaphore = new SemaphoreSlim(1);
+                await singleSemaphore.WaitAsync();
+                try
+                {
+                    var completeFileStream = new MemoryStream();
+                    var progress = new Progress<long>(bytes =>
+                    {
+                        lock (progressLock)
+                        {
+                            _currentlyDownloadingItem.BytesDownloaded += bytes;
+                        }
+                    });
+                    await DownloadFile(url, completeFileStream, progress, CancellationToken.None);
+                    completeFileStream.Position = 0;
+                    return completeFileStream;
+                }
+                finally
+                {
+                    singleSemaphore.Release();
+                }
+            }
 
             int maxDegreeOfParallelism = downloadConfiguration.MaxDegreeOfParallelism;
             long segmentSize = fileSize / maxDegreeOfParallelism;
             var tasks = new List<Task<MemoryStream>>();
             var semaphore = new SemaphoreSlim(maxDegreeOfParallelism);
-            var progressLock = new object();
 
             for (int i = 0; i < maxDegreeOfParallelism; i++)
             {
@@ -98,7 +116,48 @@ namespace DownloadManager.Services.Services
             }
         }
 
-        public async Task<bool> IsSegmentedDownloadSupported(string url)
+        public void SetCurrentItem(DownloadItem currentlyDownloadingItem)
+        {
+            _currentlyDownloadingItem = currentlyDownloadingItem;
+        }
+
+        private async Task DownloadFile(string url, Stream targetStream, IProgress<long> progress, CancellationToken cancellationToken)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+            using (var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+            {
+                response.EnsureSuccessStatusCode();
+                var totalBytesRead = 0L;
+                var buffer = new byte[81920]; // 80 KB buffer
+                var contentStream = await response.Content.ReadAsStreamAsync();
+
+                int bytesRead;
+                while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)) > 0)
+                {
+                    await targetStream.WriteAsync(buffer, 0, bytesRead, cancellationToken);
+                    totalBytesRead += bytesRead;
+                    progress?.Report(bytesRead);
+                }
+            }
+        }
+
+        private async Task<long> GetFileSize(string url)
+        {
+            try
+            {
+                using var request = new HttpRequestMessage(HttpMethod.Head, url);
+                using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
+                return response.Content.Headers.ContentLength ?? 0;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        private async Task<bool> IsSegmentedDownloadSupported(string url)
         {
             try
             {
@@ -121,28 +180,7 @@ namespace DownloadManager.Services.Services
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
-
             return false;
-        }
-
-        public void SetCurrentItem(DownloadItem currentlyDownloadingItem)
-        {
-            _currentlyDownloadingItem = currentlyDownloadingItem;
-        }
-
-        private async Task<long> GetFileSize(string url)
-        {
-            try
-            {
-                using var request = new HttpRequestMessage(HttpMethod.Head, url);
-                using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                response.EnsureSuccessStatusCode();
-                return response.Content.Headers.ContentLength ?? 0;
-            }
-            catch (Exception ex)
-            {
-                return 0;
-            }
         }
     }
 }
