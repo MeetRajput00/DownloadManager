@@ -92,7 +92,7 @@ namespace DownloadManager.ViewModels
                 var stopWatch = new Stopwatch();
                 stopWatch.Start();
                 _logger.LogInfo($"Download started for {filename}.");
-                var memoryStream = await _downloadService.Download(DownloadUrl, new DownloadConfiguration());
+                var memoryStream = await _downloadService.Download(DownloadUrl);
                 CurrentDownloadItem.FilePath = await _fileService.SaveFile(memoryStream, filename, new CancellationToken());
                 stopWatch.Stop();
                 _logger.LogInfo($"Download finished for {filename}. Total time taken: {new TimeSpan(stopWatch.ElapsedTicks)}");

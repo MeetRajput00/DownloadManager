@@ -18,7 +18,7 @@ namespace DownloadManager.Services.Services
             _logger = logger;
         }
 
-        public async Task<MemoryStream> Download(string url, DownloadConfiguration downloadConfiguration)
+        public async Task<MemoryStream> Download(string url)
         {
             long fileSize = await GetFileSize(url);
             _currentlyDownloadingItem.TotalBytes = fileSize;
@@ -47,7 +47,7 @@ namespace DownloadManager.Services.Services
                 }
             }
 
-            int maxDegreeOfParallelism = downloadConfiguration.MaxDegreeOfParallelism;
+            int maxDegreeOfParallelism = Lists._downloadedConfiguration.MaxDegreeOfParallelism;
             long segmentSize = fileSize / maxDegreeOfParallelism;
             var tasks = new List<Task<MemoryStream>>();
             var semaphore = new SemaphoreSlim(maxDegreeOfParallelism);
