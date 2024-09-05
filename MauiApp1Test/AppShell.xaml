@@ -12,7 +12,7 @@
         <Grid>
             <Label
                 MinimumHeightRequest="80"
-                Text="Settings"
+                Text="Navigator"
                 FontAttributes="Bold"
                 HorizontalTextAlignment="Center"
                 VerticalTextAlignment="Center" />
@@ -21,17 +21,35 @@
     <FlyoutItem
         FlyoutDisplayOptions="AsMultipleItems">
         <Tab
-            Title="Configuration">
+            Title="Home"
+            Icon="download_icon.png">
             <ShellContent
-                Title="Configuration"
+                Title="Home"
                 ContentTemplate="{DataTemplate views:Download}"
                 Route="MainPage" />
         </Tab>
         <Tab
-            Title="Logs.txt">
+            Title="Browser"
+            Icon="search_engine.png">
+            <ShellContent
+                Title="Browser"
+                ContentTemplate="{DataTemplate views:Browser}"
+                Route="MainPage" />
+        </Tab>
+        <Tab
+            Title="Configuration"
+            Icon="configuration_icon.png">
+            <ShellContent
+                Title="Configuration"
+                ContentTemplate="{DataTemplate views:Configuration}"
+                Route="MainPage" />
+        </Tab>
+        <Tab
+            Title="Logs.txt"
+            Icon="log_icon.png">
             <ShellContent
                 Title="Logs"
-                ContentTemplate="{DataTemplate views:Download}"
+                ContentTemplate="{DataTemplate views:Logs}"
                 Route="MainPage" />
         </Tab>
     </FlyoutItem>

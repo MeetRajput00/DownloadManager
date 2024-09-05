@@ -47,7 +47,12 @@ namespace DownloadManager
             builder.Services.AddSingleton<Services.IServices.IDownloadService, Services.Services.DownloadService>();
             builder.Services.AddSingleton<ViewModels.DownloadPageViewModel>();
             builder.Services.AddSingleton<View.Download>();
-
+            builder.Services.AddSingleton<ViewModels.BrowserPageViewModel>();
+            builder.Services.AddSingleton<View.Browser>();
+            builder.Services.AddSingleton<ViewModels.ConfigurationPageViewModel>();
+            builder.Services.AddSingleton<View.Configuration>();
+            builder.Services.AddSingleton<ViewModels.LogsPageViewModel>();
+            builder.Services.AddSingleton<View.Logs>();
             return builder.Build();
         }
     }
