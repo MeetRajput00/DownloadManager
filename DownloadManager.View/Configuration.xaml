@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="DownloadManager.View.Configuration"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:DownloadManager.Services;assembly=DownloadManager.Services"
+    Title="Configuration">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+        <material:TextField
+            Margin="6"
+            Title="Max Degree of Parallelism"
+            HorizontalOptions="FillAndExpand"
+            Text="{Binding DownloadConfiguration.MaxDegreeOfParallelism, Mode=TwoWay}"
+            AllowClear="True"
+            AccentColor="{StaticResource Key=PrimaryDark}"></material:TextField>
+        <Button
+            Margin="5,0,0, 10"
+            Grid.Row="1"
+            Command="{Binding ClearCacheCommand,Mode=OneWay}"
+            Background="{StaticResource Key=PrimaryDark}"
+            StyleClass="ElevatedButton"
+            Text="Clear Cache"
+            VerticalOptions="End"
+            HorizontalOptions="Start" />
+    </Grid>
+</ContentPage>

@@ -11,6 +11,8 @@ namespace DownloadManager.Services
 
         private static readonly IStorageService _storageService = new StorageService();
 
+        public static DownloadConfiguration _downloadedConfiguration { get; set; } = new DownloadConfiguration();
+
         public static List<DownloadItem> _downloadedItems { get; set; }
 
         public static async Task InitializeAsync()
