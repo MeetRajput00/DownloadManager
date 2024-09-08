@@ -1,12 +1,54 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="DownloadManager.View.Browser"
-             Title="Browser">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="DownloadManager.View.Browser"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    Title="Browser">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <material:TextField
+                Margin="6"
+                Title="Search address"
+                HorizontalOptions="FillAndExpand"
+                Text="{Binding Url, Mode=TwoWay}"
+                AllowClear="True"
+                AccentColor="{StaticResource Key=PrimaryDark}">
+                <material:TextField.Attachments>
+                    <Button
+                        Margin="0,5,5,5"
+                        Clicked="Go_To_Url_Button_Clicked"
+                        Background="{StaticResource Key=PrimaryDark}"
+                        StyleClass="ElevatedButton"
+                        Text="Search"
+                        VerticalOptions="End"
+                        HorizontalOptions="End" />
+                </material:TextField.Attachments>
+            </material:TextField>
+        </Grid>
+        <WebView
+            x:Name="WebView"
+            Grid.Row="1"
+            Source="https://www.google.com"
+            Navigating="OnWebViewNavigating"
+            Navigated="OnWebViewNavigated" />
+        <ActivityIndicator
+            x:Name="loadingIndicator"
+            Grid.Row="1"
+            IsRunning="True"
+            IsVisible="{Binding IsLoading, Mode=OneWay}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            Color="Gray" />
+    </Grid>
 </ContentPage>

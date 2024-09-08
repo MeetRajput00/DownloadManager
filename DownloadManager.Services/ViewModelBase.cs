@@ -6,6 +6,14 @@ namespace DownloadManager.Services
 {
     public class ViewModelBase : ObservableObject
     {
+        private bool _isLoading;
+
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { _isLoading = value; RaisePropertyChanged(); }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged([CallerMemberName] string name = "") =>
