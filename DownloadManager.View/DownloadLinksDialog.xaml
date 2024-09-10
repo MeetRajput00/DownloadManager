@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="DownloadManager.View.DownloadLinksDialog"
+    Title="DownloadLinksDialog">
+    <StackLayout>
+        <Label
+            Margin="15,15,0,0"
+            Text="Downloadable Links"
+            FontSize="Large"
+            FontAttributes="Bold"
+            HorizontalOptions="Start" />
+        <ListView
+            Background="GhostWhite"
+            SelectedItem="{Binding CurrentItem, Mode=TwoWay}"
+            ItemsSource="{Binding DownloadLinks, Mode=OneWay}"
+            VerticalScrollBarVisibility="Always"
+            RowHeight="75">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid
+                            Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition
+                                    Height="2*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Margin="10,0,0,0"
+                                Text="File name: " />
+                            <Label
+                                Grid.Column="1"
+                                Margin="10,0,0,0"
+                                Text="{Binding Title,Mode=OneWay}" />
+                            <Label
+                                Margin="10,0,0,0"
+                                Grid.Row="1"
+                                Text="Url: " />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="10,0,0,0"
+                                Text="{Binding Url,Mode=OneWay}" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!-- Buttons at the bottom -->
+        <StackLayout
+            Orientation="Horizontal"
+            HorizontalOptions="End"
+            Padding="0,20,0,0">
+            <Button
+                Margin="0,5,5,15"
+                Clicked="DownloadClicked"
+                Text="Download"
+                Background="{StaticResource Key=PrimaryDark}"
+                StyleClass="ElevatedButton"
+                VerticalOptions="End"
+                HorizontalOptions="End" />
+            <Button
+                Margin="0,5,15,15"
+                Clicked="CancelClicked"
+                Text="Cancel"
+                Background="{StaticResource Key=PrimaryDark}"
+                StyleClass="ElevatedButton"
+                VerticalOptions="End"
+                HorizontalOptions="End" />
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

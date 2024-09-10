@@ -34,9 +34,23 @@ public partial class Browser : ContentPage
         (function() {
             var links = document.querySelectorAll('a[href]');
             var downloadLinks = [];
+            const downloadableFileExtensions = [
+                "".pdf"", "".doc"", "".docx"", "".txt"", "".xls"", "".xlsx"", "".ppt"", "".pptx"",
+                "".odt"", "".ods"", "".epub"", "".rtf"", "".jpg"", "".jpeg"", "".png"", "".gif"",
+                "".bmp"", "".tiff"", "".tif"", "".svg"", "".ico"", "".webp"", "".mp3"", "".wav"",
+                "".aac"", "".ogg"", "".flac"", "".m4a"", "".wma"", "".mp4"", "".avi"", "".mkv"",
+                "".mov"", "".wmv"", "".flv"", "".webm"", "".3gp"", "".m4v"", "".zip"", "".rar"",
+                "".7z"", "".tar"", "".gz"", "".bz2"", "".iso"", "".dmg"", "".exe"", "".msi"", "".apk"",
+                "".bat"", "".sh"", "".jar"", "".app"", "".html"", "".htm"", "".css"", "".js"", "".json"",
+                "".xml"", "".csv"", "".php"", "".java"", "".cpp"", "".cs"", "".py"", "".rb""
+            ];
+
+            function isDownloadableLink(href) {
+                return downloadableFileExtensions.some(ext => href.endsWith(ext));
+            }
             links.forEach(function(link) {
                 var href = link.getAttribute('href');
-                if (href.endsWith('.pdf') || href.endsWith('.zip') || href.endsWith('.jpg')) {
+                if (isDownloadableLink(href)) {
                     downloadLinks.push(href);
                 }
             });
@@ -45,8 +59,6 @@ public partial class Browser : ContentPage
     ";
 
         var result = await WebView.EvaluateJavaScriptAsync(jsCode);
-
-        // Check if result is valid before attempting to deserialize
         if (!string.IsNullOrEmpty(result))
         {
             try
@@ -62,6 +74,7 @@ public partial class Browser : ContentPage
         {
             Console.WriteLine("No result returned from JavaScript.");
         }
+        await Navigation.PushModalAsync(new DownloadLinksDialog(ViewModel.DownloadableLinks.ToList()));
     }
 
     private void Go_To_Url_Button_Clicked(object sender, EventArgs e)
@@ -109,7 +122,7 @@ public partial class Browser : ContentPage
             {
                 if (insideString)
                 {
-                    results.Add(currentUrl.ToString());
+                    results.Add(currentUrl.ToString().TrimEnd('\\'));
                     currentUrl.Clear();
                 }
                 insideString = !insideString;
