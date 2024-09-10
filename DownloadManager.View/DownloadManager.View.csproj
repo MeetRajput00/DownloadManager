@@ -43,6 +43,9 @@
 	  <MauiXaml Update="Download.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="DownloadLinksDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Logs.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

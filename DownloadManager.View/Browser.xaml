@@ -9,42 +9,89 @@
         <Grid.RowDefinitions>
             <RowDefinition
                 Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
                 <ColumnDefinition
                     Width="Auto" />
             </Grid.ColumnDefinitions>
-            <material:TextField
-                Margin="6"
-                Title="Search address"
-                HorizontalOptions="FillAndExpand"
-                Text="{Binding Url, Mode=TwoWay}"
-                AllowClear="True"
-                AccentColor="{StaticResource Key=PrimaryDark}">
-                <material:TextField.Attachments>
-                    <Button
-                        Margin="0,5,5,5"
-                        Clicked="Go_To_Url_Button_Clicked"
-                        Background="{StaticResource Key=PrimaryDark}"
-                        StyleClass="ElevatedButton"
-                        Text="Search"
-                        VerticalOptions="End"
-                        HorizontalOptions="End" />
-                </material:TextField.Attachments>
-            </material:TextField>
+            <Button
+                Margin="8,5,5,5"
+                HeightRequest="40"
+                Clicked="Back_To_Previous_Button_Clicked"
+                ImageSource="undo.png"
+                Background="{StaticResource Key=PrimaryDark}"
+                StyleClass="ElevatedButton"
+                VerticalOptions="End"
+                HorizontalOptions="End" />
+            <Button
+                Grid.Column="1"
+                Margin="0,5,5,5"
+                Clicked="Move_Forward_Button_Clicked"
+                ImageSource="forward.png"
+                HeightRequest="40"
+                Background="{StaticResource Key=PrimaryDark}"
+                StyleClass="ElevatedButton"
+                VerticalOptions="End"
+                HorizontalOptions="End" />
+            <Button
+                Grid.Column="2"
+                Margin="0,5,5,5"
+                Clicked="Reload_Button_Clicked"
+                ImageSource="reload.png"
+                HeightRequest="40"
+                Background="{StaticResource Key=PrimaryDark}"
+                StyleClass="ElevatedButton"
+                VerticalOptions="End"
+                HorizontalOptions="End" />
+            <Button
+                Grid.Column="3"
+                Margin="0,5,5,5"
+                HeightRequest="40"
+                Clicked="Button_Clicked"
+                Text="{Binding DownloadableLinksHeader,Mode=OneWay}"
+                Background="{StaticResource Key=PrimaryDark}"
+                StyleClass="ElevatedButton"
+                VerticalOptions="End"
+                HorizontalOptions="End" />
         </Grid>
+        <material:TextField
+            Grid.Row="1"
+            Margin="6"
+            Title="Search address"
+            HorizontalOptions="FillAndExpand"
+            Text="{Binding Url, Mode=TwoWay}"
+            AllowClear="True"
+            AccentColor="{StaticResource Key=PrimaryDark}">
+            <material:TextField.Attachments>
+                <Button
+                    Margin="0,5,5,5"
+                    Clicked="Go_To_Url_Button_Clicked"
+                    Background="{StaticResource Key=PrimaryDark}"
+                    StyleClass="ElevatedButton"
+                    Text="Search"
+                    VerticalOptions="End"
+                    HorizontalOptions="End" />
+            </material:TextField.Attachments>
+        </material:TextField>
         <WebView
             x:Name="WebView"
-            Grid.Row="1"
+            Grid.Row="2"
             Source="https://www.google.com"
             Navigating="OnWebViewNavigating"
             Navigated="OnWebViewNavigated" />
         <ActivityIndicator
             x:Name="loadingIndicator"
-            Grid.Row="1"
+            Grid.Row="2"
             IsRunning="True"
             IsVisible="{Binding IsLoading, Mode=OneWay}"
             VerticalOptions="Center"

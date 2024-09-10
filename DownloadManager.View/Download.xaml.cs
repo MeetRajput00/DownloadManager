@@ -4,7 +4,7 @@ using UraniumUI.Material.Controls;
 
 namespace DownloadManager.View;
 
-public partial class Download : ContentPage
+public partial class Download : ContentPage, IQueryAttributable
 {
     public DownloadPageViewModel ViewModel { get; set; }
 
@@ -13,6 +13,17 @@ public partial class Download : ContentPage
         InitializeComponent();
         ViewModel = viewModel;
         BindingContext = ViewModel;
+    }
+
+    // Implement IQueryAttributable to handle query parameters
+    public async void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.ContainsKey("myString"))
+        {
+            var downloadUrl = Uri.UnescapeDataString(query["myString"] as string);
+            ViewModel.DownloadUrl = downloadUrl;
+            ViewModel.DownloadCommand.Execute(null);
+        }
     }
 
     private void Download_url_text_changed(object sender, TextChangedEventArgs e)

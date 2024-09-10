@@ -18,6 +18,8 @@ namespace DownloadManager.ViewModels
 
         private readonly ILogger _logger;
 
+        private readonly IMapper _mapper;
+
         private DownloadItem _currentDownloadItem = new DownloadItem();
 
         private ObservableCollection<DownloadItem> _downloadedItems = new ObservableCollection<DownloadItem>(Lists._downloadedItems);
@@ -67,26 +69,23 @@ namespace DownloadManager.ViewModels
 
         public string ListViewHeader => $"Downloaded Items ({DownloadedItems.Count})";
 
-        public DownloadPageViewModel(IFileService fileService, IDownloadService downloadService, ILogger logger)
+        public DownloadPageViewModel(IFileService fileService,
+            IDownloadService downloadService,
+            ILogger logger,
+            IMapper mapper)
         {
             _fileService = fileService;
             _downloadService = downloadService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         private async Task DownloadCommandExecute()
         {
-            var uri = new Uri(DownloadUrl);
-            var filename = System.IO.Path.GetFileName(uri.LocalPath);
+            CurrentDownloadItem = _mapper.UrlToDownloadItem(DownloadUrl);
+            var filename = CurrentDownloadItem.Title;
             try
             {
-                CurrentDownloadItem = new DownloadItem()
-                {
-                    StartTime = DateTime.Now,
-                    Url = DownloadUrl,
-                    Title = filename,
-                    Status = Models.Enums.DownloadStatus.Downloading
-                };
                 DownloadedItems.Insert(0, CurrentDownloadItem);
                 _downloadService.SetCurrentItem(CurrentDownloadItem);
                 var stopWatch = new Stopwatch();
