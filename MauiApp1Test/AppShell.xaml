@@ -26,7 +26,7 @@
             <ShellContent
                 Title="Home"
                 ContentTemplate="{DataTemplate views:Download}"
-                Route="MainPage" />
+                Route="home" />
         </Tab>
         <Tab
             Title="Browser"
@@ -34,7 +34,7 @@
             <ShellContent
                 Title="Browser"
                 ContentTemplate="{DataTemplate views:Browser}"
-                Route="MainPage" />
+                Route="browser" />
         </Tab>
         <Tab
             Title="Configuration"
@@ -42,7 +42,7 @@
             <ShellContent
                 Title="Configuration"
                 ContentTemplate="{DataTemplate views:Configuration}"
-                Route="MainPage" />
+                Route="configuration" />
         </Tab>
         <Tab
             Title="Logs.txt"
@@ -50,7 +50,7 @@
             <ShellContent
                 Title="Logs"
                 ContentTemplate="{DataTemplate views:Logs}"
-                Route="MainPage" />
+                Route="logs" />
         </Tab>
     </FlyoutItem>
 </Shell>
